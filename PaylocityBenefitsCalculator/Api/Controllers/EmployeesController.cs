@@ -24,6 +24,16 @@ public class EmployeesController : ControllerBase
     {
         var employee = await _employeeRepository.GetEmployeeById(id);
 
+        if(employee == null)
+        {
+            var employeeNotFound = new ApiResponse<GetEmployeeDto>
+            {
+                Message = "Employee Id not found",
+                Success = false
+            };
+            return employeeNotFound;
+        }
+
         var result = new ApiResponse<GetEmployeeDto>
         {
             Data = employee,

@@ -12,6 +12,7 @@ builder.Services.AddRouting(options => options.LowercaseUrls = true);
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddTransient<IDependentRepository, DependentRepository>();
 builder.Services.AddSingleton<ICalculatePaycheckService, CalculatePaycheckService>();
 builder.Services.AddTransient<IGetEmployeesService, GetEmployeesService>();
 

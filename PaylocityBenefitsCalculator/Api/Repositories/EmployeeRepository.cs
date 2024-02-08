@@ -20,11 +20,6 @@ public class EmployeeRepository : IEmployeeRepository
     {
         var employeeDtos = await _getEmployeesService.GetEmployees();
 
-        //var employees = employeeDtos.Select(x =>
-        //{
-
-        //});
-
         return employeeDtos;
     }
 
