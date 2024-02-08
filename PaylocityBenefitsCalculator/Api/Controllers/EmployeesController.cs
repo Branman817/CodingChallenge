@@ -50,13 +50,13 @@ public class EmployeesController : ControllerBase
 
     [SwaggerOperation(Summary = "View Employee Paycheck")]
     [HttpGet("{id}/paycheck")]
-    public async Task<ActionResult<ApiResponse<string>>> GetEmployeePaycheck(int id)
+    public async Task<ActionResult<ApiResponse<Paycheck>>> GetEmployeePaycheck(int id)
     {
         var paycheck = await _employeeRepository.GetEmployeePaycheck(id);
 
-        var result = new ApiResponse<string>
+        var result = new ApiResponse<Paycheck>
         {
-            Data = $"Employee ID {id} has a paycheck of ${(double)paycheck.Value}",
+            Data = paycheck,
             Success = true
         };
 

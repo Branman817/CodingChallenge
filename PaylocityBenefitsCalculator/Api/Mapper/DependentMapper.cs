@@ -18,4 +18,18 @@ public static class DependentMapper
 
         return dto;
     }
+
+    public static Dependent GetDependentDtoToDependent(GetDependentDto dto)
+    {
+        var dependent = new Dependent
+        {
+            Id = dto.Id,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            DateOfBirth = dto.DateOfBirth,
+            Relationship = dto.Relationship,
+        };
+
+        return dependent;
+    }
 }
