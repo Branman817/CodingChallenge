@@ -1,5 +1,4 @@
-﻿using Api.Dtos.Dependent;
-using Api.Dtos.Employee;
+﻿using Api.Dtos.Employee;
 using Api.Mapper;
 using Api.Models;
 
@@ -80,9 +79,7 @@ public class GetEmployeesService : IGetEmployeesService
 
     public async Task<IEnumerable<GetEmployeeDto>> GetEmployees()
     {
-        var result = _employees.Select(x => EmployeeMapper.EmployeeToGetEmployeeDto(x)).ToList();
-
-        var employees = result.Where(x => ValidDependencies(x)).ToList();
+        var employees = _employees.Select(x => EmployeeMapper.EmployeeToGetEmployeeDto(x)).ToList();
 
         return employees;
     }
@@ -91,20 +88,13 @@ public class GetEmployeesService : IGetEmployeesService
     {
         var employee = _employees.FirstOrDefault(x => x.Id == id);
 
+        if(employee == null)
+        {
+            throw new Exception("Employee Id not found");
+        }
+
         var employeeDto = EmployeeMapper.EmployeeToGetEmployeeDto(employee);
 
         return employeeDto;
-    }
-
-    private bool ValidDependencies(GetEmployeeDto employee)
-    {
-        // check that there is only 1 spouse or domestic partner (not both)
-        var partner = employee.Dependents.Where(x => x.Relationship == Relationship.Spouse || x.Relationship == Relationship.DomesticPartner).ToList();
-        if(partner.Count > 1)
-        {
-            return false;
-        }
-
-        return true;
     }
 }

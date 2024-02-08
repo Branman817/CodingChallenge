@@ -18,25 +18,52 @@ public class EmployeeRepository : IEmployeeRepository
 
     public async Task<IEnumerable<GetEmployeeDto>> GetEmployees()
     {
-        var employeeDtos = await _getEmployeesService.GetEmployees();
+        var result = await _getEmployeesService.GetEmployees();
+
+        var employeeDtos = result.Where(x => ValidDependencies(x)).ToList();
 
         return employeeDtos;
     }
 
     public async Task<GetEmployeeDto> GetEmployeeById(int id)
     {
-        var employeeDto = await _getEmployeesService.GetEmployeeById(id);
-
-        return employeeDto;
+        try
+        {
+            var employeeDto = await _getEmployeesService.GetEmployeeById(id);
+            return employeeDto;
+        }
+        catch(Exception)
+        {
+            throw;
+        }
     }
 
     // Create and call a separate service for calculating an employee's paycheck, abiding by Single Responsiblity Principle
     public async Task<Paycheck> GetEmployeePaycheck(int id)
     {
-        var employee = await _getEmployeesService.GetEmployeeById(id);
+        try
+        {
+            var employee = await _getEmployeesService.GetEmployeeById(id);
 
-        var paycheck = _calculatePaycheckService.GetEmployeePaycheck(employee);
+            var paycheck = _calculatePaycheckService.GetEmployeePaycheck(employee);
 
-        return paycheck;
+            return paycheck;
+        }
+        catch
+        {
+            throw;
+        }
+    }
+
+    private bool ValidDependencies(GetEmployeeDto employee)
+    {
+        // check that there is only 1 spouse or domestic partner (not both)
+        var partner = employee.Dependents.Where(x => x.Relationship == Relationship.Spouse || x.Relationship == Relationship.DomesticPartner).ToList();
+        if (partner.Count > 1)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

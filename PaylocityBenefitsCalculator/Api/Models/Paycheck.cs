@@ -9,6 +9,4 @@ public class Paycheck
     public decimal BaseValue { get; set; }
 
     public decimal BenefitCosts { get; set; }
-
-    public Employee Employee { get; set; }
 }

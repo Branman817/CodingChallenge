@@ -21,26 +21,28 @@ public class DependentsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<ApiResponse<GetDependentDto>>> Get(int id)
     {
-        var dependent = await _dependentRepository.GetDependentByIdAsync(id);
+        try
+        {
+            var dependent = await _dependentRepository.GetDependentByIdAsync(id);
 
-        if(dependent == null)
+            var result = new ApiResponse<GetDependentDto>
+            {
+                Data = dependent,
+                Success = true
+            };
+
+            return result;
+        }
+        catch (Exception ex)
         {
             var dependentNotFound = new ApiResponse<GetDependentDto>
             {
-                Message = "Dependent Id doesn't exist",
+                Message = ex.Message,
                 Success = false
             };
 
             return dependentNotFound;
         }
-
-        var result = new ApiResponse<GetDependentDto>
-        {
-            Data = dependent,
-            Success = true
-        };
-
-        return result;
     }
 
     [SwaggerOperation(Summary = "Get all dependents")]

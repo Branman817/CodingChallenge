@@ -32,6 +32,10 @@ public class DependentRepository : IDependentRepository
         var dependents = employees.SelectMany(x => x.Dependents).ToList();
 
         var dependentById = dependents.Where(x => x.Id == id).FirstOrDefault();
+        if(dependentById == null)
+        {
+            throw new Exception("Dependent Id not found");
+        }
 
         return dependentById;
     }
