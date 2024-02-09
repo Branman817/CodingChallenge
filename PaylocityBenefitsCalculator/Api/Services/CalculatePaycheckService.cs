@@ -23,20 +23,20 @@ public class CalculatePaycheckService : ICalculatePaycheckService
     {
         var paycheck = new Paycheck();
         paycheck.BaseValue = Math.Round(employee.Salary / _paychecksPerYear, 2);
-        var benefitsCostPerMonth = _baseBenefitsCostPerMonth;
 
+        // Calculate the monthly benefits costs, multiply it by 12 to get the yearly benefits cost, and then divide that result by the number of paychecks per year
+        var benefitsCostPerMonth = _baseBenefitsCostPerMonth;
         if (employee.Dependents.Count > 0)
         {
             benefitsCostPerMonth += AdditionalBenefitsCost(employee.Dependents.Select(x => DependentMapper.GetDependentDtoToDependent(x)));
         }
         if (employee.Salary > 80000m)
         {
-            benefitsCostPerMonth += (employee.Salary * _additionalBenefitPercentile) / _paychecksPerYear;
+            benefitsCostPerMonth += (employee.Salary * _additionalBenefitPercentile) / 12;
         }
-
         var benefitsCostPerYear = benefitsCostPerMonth * 12;
         var benefitsCostPerPaycheck = benefitsCostPerYear / _paychecksPerYear;
-        paycheck.BenefitCosts = benefitsCostPerPaycheck;
+        paycheck.BenefitCosts = Math.Round(benefitsCostPerPaycheck, 2);
 
         paycheck.Pay = paycheck.BaseValue - paycheck.BenefitCosts;
         paycheck.Pay = Math.Round(paycheck.Pay, 2);
@@ -44,16 +44,17 @@ public class CalculatePaycheckService : ICalculatePaycheckService
         return paycheck;
     }
 
+    // Calculate the additional benefits costs per dependent in a separate method, to keep the code clean, organized, and easy to read
     private decimal AdditionalBenefitsCost(IEnumerable<Dependent> dependents)
     {
         var benefitsCost = 0m;
 
         benefitsCost += dependents.Select(x =>
         {
-            var ageInDays = (DateTime.Today - x.DateOfBirth).Days;
-            double age = ageInDays / 365;
+            decimal ageInDays = (DateTime.Today - x.DateOfBirth).Days;
+            var age = ageInDays / 365;
 
-            if(age > 50.0)
+            if(age > 50.0m)
             {
                 return _dependentCost + _dependentOverFiftyAdditionalFee;
             }

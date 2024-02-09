@@ -1,10 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using Api.Controllers;
 using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
 using Api.Models;
+using Api.Repositories;
+using Api.Services;
 using Xunit;
 
 namespace ApiTests.IntegrationTests;
@@ -15,6 +19,7 @@ public class EmployeeIntegrationTests : IntegrationTest
     public async Task WhenAskedForAllEmployees_ShouldReturnAllEmployees()
     {
         var response = await HttpClient.GetAsync("/api/v1/employees");
+
         var employees = new List<GetEmployeeDto>
         {
             new()
@@ -80,6 +85,8 @@ public class EmployeeIntegrationTests : IntegrationTest
                 }
             }
         };
+
+        
         await response.ShouldReturn(HttpStatusCode.OK, employees);
     }
 
@@ -104,6 +111,58 @@ public class EmployeeIntegrationTests : IntegrationTest
     public async Task WhenAskedForANonexistentEmployee_ShouldReturn404()
     {
         var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}");
+        await response.ShouldReturn(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task CalculatePaycheckCorrectly_ForNoDependents()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/1/paycheck");
+
+        var paycheck = new Paycheck
+        {
+            BaseValue = 2900.81m,
+            Pay = 2439.27m,
+            BenefitCosts = 461.54m
+        };
+
+        await response.ShouldReturn(HttpStatusCode.OK, paycheck);
+    }
+
+    [Fact]
+    public async Task CalculatePaycheckCorrectly_WithDependents_AndOverEightyThousandSalary()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/2/paycheck");
+
+        var paycheck = new Paycheck
+        {
+            BaseValue = 3552.51m,
+            BenefitCosts = 1363.36m,
+            Pay = 2189.15m
+        };
+
+        await response.ShouldReturn(HttpStatusCode.OK, paycheck);
+    }
+
+    [Fact]
+    public async Task CalculatePaycheckCorrectly_WithDependentOverAgeFifty()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/3/paycheck");
+
+        var paycheck = new Paycheck
+        {
+            BaseValue = 5508.12m,
+            BenefitCosts = 940.93m,
+            Pay = 4567.19m
+        };
+
+        await response.ShouldReturn(HttpStatusCode.OK, paycheck);
+    }
+
+    [Fact]
+    public async Task WhenAskForANonExistentEmployeePaycheck_ShouldReturn404()
+    {
+        var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}/paycheck");
         await response.ShouldReturn(HttpStatusCode.NotFound);
     }
 }

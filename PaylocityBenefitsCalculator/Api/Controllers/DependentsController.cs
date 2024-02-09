@@ -41,7 +41,7 @@ public class DependentsController : ControllerBase
                 Success = false
             };
 
-            return dependentNotFound;
+            return NotFound(dependentNotFound);
         }
     }
 
