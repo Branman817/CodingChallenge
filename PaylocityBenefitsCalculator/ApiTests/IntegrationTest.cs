@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Builder;
 using System;
 using System.Net.Http;
 
@@ -19,7 +18,7 @@ public class IntegrationTest : IDisposable
                     //task: update your port if necessary
                     BaseAddress = new Uri("https://localhost:7124")
                 };
-                _httpClient.DefaultRequestHeaders.Add("accept", "application/json");
+                _httpClient.DefaultRequestHeaders.Add("accept", "text/plain");
             }
 
             return _httpClient;
