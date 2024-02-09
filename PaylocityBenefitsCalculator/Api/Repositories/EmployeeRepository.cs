@@ -30,6 +30,10 @@ public class EmployeeRepository : IEmployeeRepository
         try
         {
             var employeeDto = await _getEmployeesService.GetEmployeeById(id);
+            if(!ValidDependencies(employeeDto))
+            {
+                throw new Exception("Invalid employee, can't have more than 1 spouse or domestic partner or both");
+            }
             return employeeDto;
         }
         catch(Exception)
@@ -55,6 +59,7 @@ public class EmployeeRepository : IEmployeeRepository
         }
     }
 
+    // Reusable code
     private bool ValidDependencies(GetEmployeeDto employee)
     {
         // check that there is only 1 spouse or domestic partner (not both)
