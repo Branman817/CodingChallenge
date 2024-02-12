@@ -1,9 +1,9 @@
-﻿using Api.Dtos.Employee;
-using Api.Models;
+﻿using Api.Dtos;
+using Api.Dtos.Employee;
 
 namespace Api.Services;
 
 public interface ICalculatePaycheckService
 {
-    public Paycheck GetEmployeePaycheck(GetEmployeeDto employee);
+    public PaycheckDto GetEmployeePaycheck(GetEmployeeDto employee);
 }

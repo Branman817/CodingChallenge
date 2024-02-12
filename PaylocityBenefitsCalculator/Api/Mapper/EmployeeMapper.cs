@@ -19,19 +19,4 @@ public static class EmployeeMapper
 
         return dto;
     }
-
-    public static Employee GetEmployeeDtoToGetEmployee(GetEmployeeDto dto)
-    {
-        var employee = new Employee
-        {
-            Id = dto.Id,
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
-            Salary = dto.Salary,
-            DateOfBirth = dto.DateOfBirth,
-            Dependents = dto.Dependents.Select(x => DependentMapper.GetDependentDtoToDependent(x)).ToList(),
-        };
-
-        return employee;
-    }
 }

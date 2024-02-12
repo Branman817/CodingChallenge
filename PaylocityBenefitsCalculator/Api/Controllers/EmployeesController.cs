@@ -1,4 +1,5 @@
-﻿using Api.Dtos.Dependent;
+﻿using Api.Dtos;
+using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
 using Api.Models;
 using Api.Repositories;
@@ -64,13 +65,13 @@ public class EmployeesController : ControllerBase
     // Request paycheck by employee id, and return NotFound for nonexistent employees
     [SwaggerOperation(Summary = "View Employee Paycheck")]
     [HttpGet("{id}/paycheck")]
-    public async Task<ActionResult<ApiResponse<Paycheck>>> GetEmployeePaycheck(int id)
+    public async Task<ActionResult<ApiResponse<PaycheckDto>>> GetEmployeePaycheck(int id)
     {
         try
         {
             var paycheck = await _employeeRepository.GetEmployeePaycheck(id);
 
-            var result = new ApiResponse<Paycheck>
+            var result = new ApiResponse<PaycheckDto>
             {
                 Data = paycheck,
                 Success = true
@@ -80,7 +81,7 @@ public class EmployeesController : ControllerBase
         }
         catch(Exception ex)
         {
-            var employeeNotFound = new ApiResponse<Paycheck>
+            var employeeNotFound = new ApiResponse<PaycheckDto>
             {
                 Message = ex.Message,
                 Success = false

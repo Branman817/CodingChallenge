@@ -1,4 +1,6 @@
-﻿using Api.Dtos.Employee;
+﻿using Api.Dtos;
+using Api.Dtos.Dependent;
+using Api.Dtos.Employee;
 using Api.Mapper;
 using Api.Models;
 
@@ -23,16 +25,16 @@ public class CalculatePaycheckService : ICalculatePaycheckService
     // incur an additional 2% of their yearly salary in benefit costs.
     private const decimal _additionalBenefitPercentile = 0.02m;
 
-    public Paycheck GetEmployeePaycheck(GetEmployeeDto employee)
+    public PaycheckDto GetEmployeePaycheck(GetEmployeeDto employee)
     {
-        var paycheck = new Paycheck();
+        var paycheck = new PaycheckDto();
         paycheck.BaseValue = Math.Round(employee.Salary / _paychecksPerYear, 2);
 
         // Calculate the monthly benefits costs, multiply it by 12 to get the yearly benefits cost, and then divide that result by the number of paychecks per year
         var benefitsCostPerMonth = _baseBenefitsCostPerMonth;
         if (employee.Dependents.Count > 0)
         {
-            benefitsCostPerMonth += AdditionalBenefitsCost(employee.Dependents.Select(x => DependentMapper.GetDependentDtoToDependent(x)));
+            benefitsCostPerMonth += AdditionalBenefitsCost(employee.Dependents);
         }
         if (employee.Salary > 80000m)
         {
@@ -49,7 +51,7 @@ public class CalculatePaycheckService : ICalculatePaycheckService
     }
 
     // Calculate the additional benefits costs per dependent in a separate method, to keep the code clean, organized, and easy to read
-    private decimal AdditionalBenefitsCost(IEnumerable<Dependent> dependents)
+    private decimal AdditionalBenefitsCost(IEnumerable<GetDependentDto> dependents)
     {
         var benefitsCost = 0m;
 

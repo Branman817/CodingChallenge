@@ -1,5 +1,5 @@
-﻿using Api.Dtos.Employee;
-using Api.Models;
+﻿using Api.Dtos;
+using Api.Dtos.Employee;
 
 namespace Api.Repositories;
 
@@ -9,5 +9,5 @@ public interface IEmployeeRepository
 
     public Task<GetEmployeeDto> GetEmployeeById(int id);
 
-    public Task<Paycheck> GetEmployeePaycheck(int id);
+    public Task<PaycheckDto> GetEmployeePaycheck(int id);
 }
