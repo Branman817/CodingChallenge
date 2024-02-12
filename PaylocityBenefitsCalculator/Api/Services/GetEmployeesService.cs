@@ -1,4 +1,5 @@
-﻿using Api.Dtos.Employee;
+﻿using Api.Dtos.Dependent;
+using Api.Dtos.Employee;
 using Api.Mapper;
 using Api.Models;
 
@@ -78,13 +79,42 @@ public class GetEmployeesService : IGetEmployeesService
                         DateOfBirth = new DateTime(1974, 1, 2)
                     }
                 }
+            },
+            new()
+            {
+                Id = 4,
+                FirstName = "Aaron",
+                LastName = "Brian",
+                Salary = 55000m,
+                DateOfBirth = new DateTime(1980, 4, 1),
+                Dependents = new List<Dependent>
+                {
+                    new()
+                    {
+                        Id= 5,
+                        FirstName = "Lisa",
+                        LastName = "Ken",
+                        Relationship = Relationship.DomesticPartner,
+                        DateOfBirth = new DateTime(1981,1, 2)
+                    },
+                    new()
+                    {
+                        Id = 6,
+                        FirstName = "Natalie",
+                        LastName = "Sarah",
+                        Relationship = Relationship.Spouse,
+                        DateOfBirth = new DateTime(1980, 4, 1)
+                    }
+                }
             }
         };
     }
 
     public async Task<IEnumerable<GetEmployeeDto>> GetEmployees()
     {
-        var employees = _employees.Select(x => EmployeeMapper.EmployeeToGetEmployeeDto(x)).ToList();
+        var result = _employees.Select(x => EmployeeMapper.EmployeeToGetEmployeeDto(x)).ToList();
+
+        var employees = result.Where(x => ValidDependencies(x)).ToList();
 
         return employees;
     }
@@ -100,6 +130,23 @@ public class GetEmployeesService : IGetEmployeesService
 
         var employeeDto = EmployeeMapper.EmployeeToGetEmployeeDto(employee);
 
+        if (!ValidDependencies(employeeDto))
+        {
+            throw new Exception("Invalid employee, can't have more than 1 spouse or domestic partner or both");
+        }
+
         return employeeDto;
+    }
+
+    // Checks that the employee only as 1 spouse or domestic partner (not both).  Written as its own metthod to be reusable code
+    private bool ValidDependencies(GetEmployeeDto employee)
+    {
+        var partner = employee.Dependents.Where(x => x.Relationship == Relationship.Spouse || x.Relationship == Relationship.DomesticPartner).ToList();
+        if (partner.Count > 1)
+        {
+            return false;
+        }
+
+        return true;
     }
 }

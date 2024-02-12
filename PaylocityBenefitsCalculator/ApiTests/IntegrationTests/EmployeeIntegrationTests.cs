@@ -114,6 +114,13 @@ public class EmployeeIntegrationTests : IntegrationTest
         await response.ShouldReturn(HttpStatusCode.NotFound);
     }
 
+    [Fact]
+    public async Task WhenAskForEmployeeWithMultipleSpouses_ShouldReturn400()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/4");
+        await response.ShouldReturn(HttpStatusCode.BadRequest);
+    }
+
     // Add new test to test that paychecks are correctly calculated
     [Fact]
     public async Task CalculatePaycheckCorrectly_ForNoDependents()
@@ -165,6 +172,13 @@ public class EmployeeIntegrationTests : IntegrationTest
     {
         var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}/paycheck");
         await response.ShouldReturn(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task WhenAskForPaycheckOfEmployeeWith_MultipleSpousesOrDomesticPartners_ShouldReturn400()
+    {
+        var response = await HttpClient.GetAsync($"/api/v1/employees/4/paycheck");
+        await response.ShouldReturn(HttpStatusCode.BadRequest);
     }
 }
 

@@ -37,6 +37,15 @@ public class EmployeesController : ControllerBase
         }
         catch(Exception ex)
         {
+            if(ex.Message == "Invalid employee, can't have more than 1 spouse or domestic partner or both")
+            {
+                var invalidEmployee = new ApiResponse<GetEmployeeDto>
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+                return BadRequest(invalidEmployee);
+            }
             var employeeNotFound = new ApiResponse<GetEmployeeDto>
             {
                 Message = ex.Message,
@@ -81,6 +90,15 @@ public class EmployeesController : ControllerBase
         }
         catch(Exception ex)
         {
+            if (ex.Message == "Invalid employee, can't have more than 1 spouse or domestic partner or both")
+            {
+                var invalidEmployee = new ApiResponse<GetEmployeeDto>
+                {
+                    Message = ex.Message,
+                    Success = false
+                };
+                return BadRequest(invalidEmployee);
+            }
             var employeeNotFound = new ApiResponse<PaycheckDto>
             {
                 Message = ex.Message,
