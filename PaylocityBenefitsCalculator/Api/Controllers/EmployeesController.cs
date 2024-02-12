@@ -61,7 +61,7 @@ public class EmployeesController : ControllerBase
         return result;
     }
 
-    // Request paycheck by employee id, so that it can easily return NotFound for nonexistent employees
+    // Request paycheck by employee id, and return NotFound for nonexistent employees
     [SwaggerOperation(Summary = "View Employee Paycheck")]
     [HttpGet("{id}/paycheck")]
     public async Task<ActionResult<ApiResponse<Paycheck>>> GetEmployeePaycheck(int id)

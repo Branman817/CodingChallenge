@@ -4,6 +4,10 @@ using Api.Models;
 
 namespace Api.Services;
 
+// An employee's paycheck is calculated in a separate service CalculatePaycheckService that is called by the EmployeeRepository
+// I made this its own service instead of as part of the EmployeeRepository because:
+// 1). Single Responsiblity Principle
+// 2). To make easier to implement any future changes regarding paychecks if and when new business requirements are made
 public class CalculatePaycheckService : ICalculatePaycheckService
 {
     // Create a service for calculating an employee's paycheck, abiding by Single Responsibility principle

@@ -6,6 +6,7 @@ using Api.Services;
 
 namespace Api.Repositories;
 
+// Create a repository that will request the employee(s) data and process it.
 public class EmployeeRepository : IEmployeeRepository
 {
     private readonly ICalculatePaycheckService _calculatePaycheckService;
@@ -59,10 +60,9 @@ public class EmployeeRepository : IEmployeeRepository
         }
     }
 
-    // Reusable code
+    // Checks that the employee only as 1 spouse or domestic partner (not both).  Written as its own metthod to be reusable code
     private bool ValidDependencies(GetEmployeeDto employee)
     {
-        // check that there is only 1 spouse or domestic partner (not both)
         var partner = employee.Dependents.Where(x => x.Relationship == Relationship.Spouse || x.Relationship == Relationship.DomesticPartner).ToList();
         if (partner.Count > 1)
         {

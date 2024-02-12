@@ -3,6 +3,7 @@ using Api.Models;
 
 namespace Api.Mapper;
 
+// Create static DependentMapper class to convert Dependent into GetDependentDto and Vice Versa
 public static class DependentMapper
 {
     public static GetDependentDto DependentToGetDependentDto(Dependent dependent)

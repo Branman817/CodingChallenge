@@ -13,6 +13,7 @@ using Xunit;
 
 namespace ApiTests.IntegrationTests;
 
+// Have API running in a separate Visual Studio window to run tests
 public class EmployeeIntegrationTests : IntegrationTest
 {
     [Fact]
@@ -91,7 +92,6 @@ public class EmployeeIntegrationTests : IntegrationTest
     }
 
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForAnEmployee_ShouldReturnCorrectEmployee()
     {
         var response = await HttpClient.GetAsync("/api/v1/employees/1");
@@ -107,13 +107,13 @@ public class EmployeeIntegrationTests : IntegrationTest
     }
     
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForANonexistentEmployee_ShouldReturn404()
     {
         var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}");
         await response.ShouldReturn(HttpStatusCode.NotFound);
     }
 
+    // Add new test to test that paychecks are correctly calculated
     [Fact]
     public async Task CalculatePaycheckCorrectly_ForNoDependents()
     {

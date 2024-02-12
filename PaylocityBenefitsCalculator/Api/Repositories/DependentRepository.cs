@@ -4,6 +4,8 @@ using Api.Services;
 
 namespace Api.Repositories;
 
+// Requesting Dependents is made as it's own repository instead of as part of the EmployeeRepository, while accessing EmployeeService
+// I made this it's own Repository to abide by the Single Responsibility Principle
 public class DependentRepository : IDependentRepository
 {
     private readonly IGetEmployeesService _getEmployeesService;

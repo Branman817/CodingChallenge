@@ -4,6 +4,11 @@ using Api.Models;
 
 namespace Api.Services;
 
+// Service for retrieving the employee(s) data.  For the purpose of this coding challenge, the employee data is hard coded as a private list,
+// while the service and public accessor methods treat it as if retrieving from a database.  Including mapping the retrieved objects onto a new list of DTOs
+// Created as it's own service as opposed to being part of the EmployeeRepository for two reasons:
+// 1). Single Responsibility Principle
+// 2). To make independent from the EmployeeRespository so that DependentRepository can access it
 public class GetEmployeesService : IGetEmployeesService
 {
     private readonly IEnumerable<Employee> _employees;

@@ -8,10 +8,10 @@ using Xunit;
 
 namespace ApiTests.IntegrationTests;
 
+// Have API running in a separate Visual Studio window to run tests
 public class DependentIntegrationTests : IntegrationTest
 {
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForAllDependents_ShouldReturnAllDependents()
     {
         var response = await HttpClient.GetAsync("/api/v1/dependents");
@@ -54,7 +54,6 @@ public class DependentIntegrationTests : IntegrationTest
     }
 
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForADependent_ShouldReturnCorrectDependent()
     {
         var response = await HttpClient.GetAsync("/api/v1/dependents/1");
@@ -70,7 +69,6 @@ public class DependentIntegrationTests : IntegrationTest
     }
 
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForANonexistentDependent_ShouldReturn404()
     {
         var response = await HttpClient.GetAsync($"/api/v1/dependents/{int.MinValue}");
