@@ -51,6 +51,11 @@ public class EmployeeRepository : IEmployeeRepository
         {
             var employee = await _getEmployeesService.GetEmployeeById(id);
 
+            if (!ValidDependencies(employee))
+            {
+                throw new Exception("Invalid employee, can't have more than 1 spouse or domestic partner or both");
+            }
+
             var paycheck = _calculatePaycheckService.GetEmployeePaycheck(employee);
 
             return paycheck;
