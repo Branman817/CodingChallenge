@@ -1,6 +1,6 @@
-﻿namespace Api.Dtos;
+﻿namespace Api.Dtos.Employee;
 
-public class PaycheckDto
+public class GetPaycheckDto
 {
     // value of paycheck after calculating total costs to be taken out of the base value
     public decimal Pay { get; set; }

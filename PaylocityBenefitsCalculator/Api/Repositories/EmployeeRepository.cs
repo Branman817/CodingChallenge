@@ -1,5 +1,4 @@
-﻿using Api.Dtos;
-using Api.Dtos.Dependent;
+﻿using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
 using Api.Mapper;
 using Api.Models;
@@ -38,7 +37,7 @@ public class EmployeeRepository : IEmployeeRepository
     }
 
     // Create and call a separate service for calculating an employee's paycheck, abiding by Single Responsiblity Principle
-    public async Task<PaycheckDto> GetEmployeePaycheck(int id)
+    public async Task<GetPaycheckDto> GetEmployeePaycheck(int id)
     {
         try
         {

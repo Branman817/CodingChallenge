@@ -129,7 +129,7 @@ public class EmployeeIntegrationTests : IntegrationTest
     {
         var response = await HttpClient.GetAsync("/api/v1/employees/1/paycheck");
 
-        var paycheck = new PaycheckDto
+        var paycheck = new GetPaycheckDto
         {
             BaseValue = 2900.81m,
             Pay = 2439.27m,
@@ -146,7 +146,7 @@ public class EmployeeIntegrationTests : IntegrationTest
     {
         var response = await HttpClient.GetAsync("/api/v1/employees/2/paycheck");
 
-        var paycheck = new PaycheckDto
+        var paycheck = new GetPaycheckDto
         {
             BaseValue = 3552.51m,
             BenefitCosts = 1363.36m,
@@ -163,7 +163,7 @@ public class EmployeeIntegrationTests : IntegrationTest
     {
         var response = await HttpClient.GetAsync("/api/v1/employees/3/paycheck");
 
-        var paycheck = new PaycheckDto
+        var paycheck = new GetPaycheckDto
         {
             BaseValue = 5508.12m,
             BenefitCosts = 940.93m,

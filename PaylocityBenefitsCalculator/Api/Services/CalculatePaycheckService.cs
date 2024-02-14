@@ -1,5 +1,4 @@
-﻿using Api.Dtos;
-using Api.Dtos.Dependent;
+﻿using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
 using Api.Mapper;
 using Api.Models;
@@ -25,9 +24,9 @@ public class CalculatePaycheckService : ICalculatePaycheckService
     // incur an additional 2% of their yearly salary in benefit costs.
     private const decimal _additionalBenefitPercentile = 0.02m;
 
-    public PaycheckDto GetEmployeePaycheck(GetEmployeeDto employee)
+    public GetPaycheckDto GetEmployeePaycheck(GetEmployeeDto employee)
     {
-        var paycheck = new PaycheckDto();
+        var paycheck = new GetPaycheckDto();
         paycheck.FirstName = employee.FirstName;
         paycheck.LastName = employee.LastName;
         paycheck.BaseValue = Math.Round(employee.Salary / _paychecksPerYear, 2);
