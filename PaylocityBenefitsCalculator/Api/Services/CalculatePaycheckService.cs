@@ -28,6 +28,8 @@ public class CalculatePaycheckService : ICalculatePaycheckService
     public PaycheckDto GetEmployeePaycheck(GetEmployeeDto employee)
     {
         var paycheck = new PaycheckDto();
+        paycheck.FirstName = employee.FirstName;
+        paycheck.LastName = employee.LastName;
         paycheck.BaseValue = Math.Round(employee.Salary / _paychecksPerYear, 2);
 
         // Calculate the monthly benefits costs, multiply it by 12 to get the yearly benefits cost, and then divide that result by the number of paychecks per year

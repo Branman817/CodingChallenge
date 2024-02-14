@@ -14,7 +14,9 @@ using Xunit;
 
 namespace ApiTests.IntegrationTests;
 
-// Have API running in a separate Visual Studio window to run tests
+// Have the API project running in a separate Visual Studio window to run tests
+// While I could use Moq to test the controllers and then each repository and service,
+// I chose to have the tests run against a running API to verify that the code would work in a real life scenario
 public class EmployeeIntegrationTests : IntegrationTest
 {
     [Fact]
@@ -131,7 +133,9 @@ public class EmployeeIntegrationTests : IntegrationTest
         {
             BaseValue = 2900.81m,
             Pay = 2439.27m,
-            BenefitCosts = 461.54m
+            BenefitCosts = 461.54m,
+            FirstName = "LeBron",
+            LastName = "James"
         };
 
         await response.ShouldReturn(HttpStatusCode.OK, paycheck);
@@ -146,7 +150,9 @@ public class EmployeeIntegrationTests : IntegrationTest
         {
             BaseValue = 3552.51m,
             BenefitCosts = 1363.36m,
-            Pay = 2189.15m
+            Pay = 2189.15m,
+            FirstName = "Ja",
+            LastName = "Morant"
         };
 
         await response.ShouldReturn(HttpStatusCode.OK, paycheck);
@@ -161,7 +167,9 @@ public class EmployeeIntegrationTests : IntegrationTest
         {
             BaseValue = 5508.12m,
             BenefitCosts = 940.93m,
-            Pay = 4567.19m
+            Pay = 4567.19m,
+            FirstName = "Michael",
+            LastName = "Jordan"
         };
 
         await response.ShouldReturn(HttpStatusCode.OK, paycheck);

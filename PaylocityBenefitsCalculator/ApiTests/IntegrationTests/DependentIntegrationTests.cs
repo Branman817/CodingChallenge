@@ -8,7 +8,9 @@ using Xunit;
 
 namespace ApiTests.IntegrationTests;
 
-// Have API running in a separate Visual Studio window to run tests
+// Have the API project running in a separate Visual Studio window to run tests
+// While I could use Moq to test the controllers and then each repository and service,
+// I chose to have the tests run against a running API to verify that the code would work in a real life scenario
 public class DependentIntegrationTests : IntegrationTest
 {
     [Fact]

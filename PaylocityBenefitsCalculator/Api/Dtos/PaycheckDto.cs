@@ -9,4 +9,8 @@ public class PaycheckDto
     public decimal BaseValue { get; set; }
 
     public decimal BenefitCosts { get; set; }
+
+    public string? FirstName { get; set; }
+
+    public string? LastName { get; set; }
 }
