@@ -1,3 +1,5 @@
+using Api.Repositories;
+using Api.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -5,8 +7,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddRouting(options => options.LowercaseUrls = true);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddTransient<IDependentRepository, DependentRepository>();
+builder.Services.AddSingleton<ICalculatePaycheckService, CalculatePaycheckService>();
+builder.Services.AddTransient<IGetEmployeesService, GetEmployeesService>();
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.EnableAnnotations();

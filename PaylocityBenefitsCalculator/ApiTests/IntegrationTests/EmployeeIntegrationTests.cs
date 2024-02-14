@@ -1,20 +1,29 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
+using Api.Controllers;
+using Api.Dtos;
 using Api.Dtos.Dependent;
 using Api.Dtos.Employee;
 using Api.Models;
+using Api.Repositories;
+using Api.Services;
 using Xunit;
 
 namespace ApiTests.IntegrationTests;
 
+// Have the API project running in a separate Visual Studio window to run tests
+// While I could use Moq to test the controllers and then each repository and service,
+// I chose to have the tests run against a running API to verify that the code would work in a real life scenario
 public class EmployeeIntegrationTests : IntegrationTest
 {
     [Fact]
     public async Task WhenAskedForAllEmployees_ShouldReturnAllEmployees()
     {
         var response = await HttpClient.GetAsync("/api/v1/employees");
+
         var employees = new List<GetEmployeeDto>
         {
             new()
@@ -80,11 +89,12 @@ public class EmployeeIntegrationTests : IntegrationTest
                 }
             }
         };
+
+        
         await response.ShouldReturn(HttpStatusCode.OK, employees);
     }
 
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForAnEmployee_ShouldReturnCorrectEmployee()
     {
         var response = await HttpClient.GetAsync("/api/v1/employees/1");
@@ -100,11 +110,83 @@ public class EmployeeIntegrationTests : IntegrationTest
     }
     
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForANonexistentEmployee_ShouldReturn404()
     {
         var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}");
         await response.ShouldReturn(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task WhenAskForEmployeeWithMultipleSpouses_ShouldReturn400()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/4");
+        await response.ShouldReturn(HttpStatusCode.BadRequest);
+    }
+
+    // Add new test to test that paychecks are correctly calculated
+    [Fact]
+    public async Task CalculatePaycheckCorrectly_ForNoDependents()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/1/paycheck");
+
+        var paycheck = new GetPaycheckDto
+        {
+            BaseValue = 2900.81m,
+            Pay = 2439.27m,
+            BenefitCosts = 461.54m,
+            FirstName = "LeBron",
+            LastName = "James"
+        };
+
+        await response.ShouldReturn(HttpStatusCode.OK, paycheck);
+    }
+
+    [Fact]
+    public async Task CalculatePaycheckCorrectly_WithDependents_AndOverEightyThousandSalary()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/2/paycheck");
+
+        var paycheck = new GetPaycheckDto
+        {
+            BaseValue = 3552.51m,
+            BenefitCosts = 1363.36m,
+            Pay = 2189.15m,
+            FirstName = "Ja",
+            LastName = "Morant"
+        };
+
+        await response.ShouldReturn(HttpStatusCode.OK, paycheck);
+    }
+
+    [Fact]
+    public async Task CalculatePaycheckCorrectly_WithDependentOverAgeFifty()
+    {
+        var response = await HttpClient.GetAsync("/api/v1/employees/3/paycheck");
+
+        var paycheck = new GetPaycheckDto
+        {
+            BaseValue = 5508.12m,
+            BenefitCosts = 940.93m,
+            Pay = 4567.19m,
+            FirstName = "Michael",
+            LastName = "Jordan"
+        };
+
+        await response.ShouldReturn(HttpStatusCode.OK, paycheck);
+    }
+
+    [Fact]
+    public async Task WhenAskForANonExistentEmployeePaycheck_ShouldReturn404()
+    {
+        var response = await HttpClient.GetAsync($"/api/v1/employees/{int.MinValue}/paycheck");
+        await response.ShouldReturn(HttpStatusCode.NotFound);
+    }
+
+    [Fact]
+    public async Task WhenAskForPaycheckOfEmployeeWith_MultipleSpousesOrDomesticPartners_ShouldReturn400()
+    {
+        var response = await HttpClient.GetAsync($"/api/v1/employees/4/paycheck");
+        await response.ShouldReturn(HttpStatusCode.BadRequest);
     }
 }
 

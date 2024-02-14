@@ -8,10 +8,12 @@ using Xunit;
 
 namespace ApiTests.IntegrationTests;
 
+// Have the API project running in a separate Visual Studio window to run tests
+// While I could use Moq to test the controllers and then each repository and service,
+// I chose to have the tests run against a running API to verify that the code would work in a real life scenario
 public class DependentIntegrationTests : IntegrationTest
 {
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForAllDependents_ShouldReturnAllDependents()
     {
         var response = await HttpClient.GetAsync("/api/v1/dependents");
@@ -54,7 +56,6 @@ public class DependentIntegrationTests : IntegrationTest
     }
 
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForADependent_ShouldReturnCorrectDependent()
     {
         var response = await HttpClient.GetAsync("/api/v1/dependents/1");
@@ -70,7 +71,6 @@ public class DependentIntegrationTests : IntegrationTest
     }
 
     [Fact]
-    //task: make test pass
     public async Task WhenAskedForANonexistentDependent_ShouldReturn404()
     {
         var response = await HttpClient.GetAsync($"/api/v1/dependents/{int.MinValue}");
